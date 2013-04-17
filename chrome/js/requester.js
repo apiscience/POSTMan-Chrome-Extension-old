@@ -5184,17 +5184,21 @@ pm.request = {
         var url = this.url;
 
         var paramArr = [];
+        //Keep a separate list of params we want to show (not URL)
+        var paramArrShow = [];
 
         for (var i = 0; i < params.length; i++) {
             var p = params[i];
             if (p.key && p.key !== "") {
                 paramArr.push(p.key + "=" + p.value);
+                if (p.key != 'url'){
+                    paramArrShow.push(p.key + "=" + p.value);
+                }
             }
         }
-
         var baseUrl = url.split("?")[0];
-        if (paramArr.length > 0) {
-            $('#url').val(baseUrl + "?" + paramArr.join('&'));
+        if (paramArrShow.length > 0) {
+            $('#url').val(baseUrl + "?" + paramArrShow.join('&'));
         }
         else {
             //Has key/val pair
@@ -5283,8 +5287,6 @@ pm.request = {
         if (environment !== null) {
             envValues = environment.values;
         }
-
-        var url = this.url;
         this.body.data = pm.request.body.getData(true);
 
         if (url === "") {
@@ -5295,9 +5297,13 @@ pm.request = {
         pm.request.xhr = xhr;
         pm.request.url = url;
 
-        url = pm.request.encodeUrl(url);
+        //url = pm.request.encodeUrl(url);
+
 
         var originalUrl = $('#url').val();
+        //Add the URL as a query string parameter
+        //url = 'http://localhost:3000/try?url=' + originalUrl
+        url = 'http://apiscience.com/try?url=' + originalUrl
         var method = this.method.toUpperCase();
 
         var data = pm.request.body.getData(true);
